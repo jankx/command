@@ -1,3 +1,3 @@
 <?php
-class Foxy_Cli_Metabox {
+class Foxy_CLI_Metabox {
 }

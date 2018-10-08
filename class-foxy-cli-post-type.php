@@ -1,3 +1,3 @@
 <?php
-class Foxy_Cli_Post_Type {
+class Foxy_CLI_Post_Type {
 }

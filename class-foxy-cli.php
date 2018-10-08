@@ -1,5 +1,5 @@
 <?php
-class Foxy_Cli {
+class Foxy_CLI {
 	public static function register_commands() {
 
 	}

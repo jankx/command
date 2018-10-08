@@ -1,3 +1,3 @@
 <?php
-class Foxy_Cli_Option {
+class Foxy_CLI_Option {
 }
