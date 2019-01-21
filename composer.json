@@ -1,18 +1,15 @@
 {
-    "name": "foxy-theme-framework/cli",
-    "description": "Foxy theme framework CLI",
+    "name": "jankx/cli",
+    "description": "You love WP CLI and usually use it to manage WordPress. So you will love Jankx CLI for WP CLI too",
     "type": "library",
     "license": "MIT",
     "authors": [
         {
-            "name": "WPClouds",
-            "email": "foxy@wpclouds.com"
+            "name": "Puleeno Nguyen",
+            "email": "puleeno@gmail.com"
         }
     ],
     "require": {},
     "autoload": {
-        "files": [
-            ""
-        ]
     }
 }
