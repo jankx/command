@@ -14,9 +14,6 @@
   "autoload": {
     "psr-4": {
       "Jankx\\CLI\\": "src/"
-    },
-    "files": [
-      "init.php"
-    ]
+    }
   }
 }
