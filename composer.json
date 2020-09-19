@@ -1,6 +1,6 @@
 {
   "name": "jankx/command",
-  "description": "You love WP CLI and usually use it to manage WordPress. So you will love Jankx CLI for WP CLI too",
+  "description": "You love WP CLI and usually use it to manage WordPress. Maybe you will love Jankx for WP CLI too.",
   "type": "library",
   "license": "MIT",
   "minimum-stability": "dev",
