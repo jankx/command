@@ -18,6 +18,4 @@ class Option extends Command
     {
         return array();
     }
-
-    public function
 }
