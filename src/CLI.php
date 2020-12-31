@@ -8,7 +8,7 @@ use Jankx\Command\Abstracts\Command;
 
 class CLI
 {
-    const NAMESPACE = 'jankx';
+    const COMMAND_NAMESPACE = 'jankx';
 
     protected static $instance;
 
