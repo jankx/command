@@ -57,7 +57,7 @@ class CLI
 
     public function register_root_command()
     {
-        WP_CLI::add_command(static::NAMESPACE, array($this, 'print_help'));
+        WP_CLI::add_command(static::COMMAND_NAMESPACE, array($this, 'print_help'));
     }
 
     public function print_help()
@@ -72,7 +72,7 @@ class CLI
 
             if (is_callable($args)) {
                 WP_CLI::add_command(
-                    sprintf('%s %s', static::NAMESPACE, $name),
+                    sprintf('%s %s', static::COMMAND_NAMESPACE, $name),
                     $args
                 );
             }
