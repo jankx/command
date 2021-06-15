@@ -1,9 +1,7 @@
 <?php
-namespace Jankx\Command;
+namespace Jankx\Command\Commands;
 
-use WP_CLI;
-use Jankx\Command\CLI;
-use Jankx\Command\Abstracts\Command;
+use Jankx\Command\Command;
 
 class Option extends Command
 {
@@ -14,8 +12,8 @@ class Option extends Command
         return static::COMMAND_NAME;
     }
 
-    public function register_command()
+    public function create()
     {
-        return array();
+        echo 'create';
     }
 }

@@ -10,7 +10,9 @@
       "email": "puleeno@gmail.com"
     }
   ],
-  "require": {},
+  "require": {
+    "jankx/helpers": "*"
+  },
   "autoload": {
     "psr-4": {
       "Jankx\\Command\\": "src/"

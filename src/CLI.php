@@ -3,8 +3,9 @@ namespace Jankx\Command;
 
 use WP_CLI;
 
-use Jankx\Command\Option;
-use Jankx\Command\Abstracts\Command;
+use Jankx\Command\Command;
+use Jankx\Command\Commands\Option;
+use Jankx\Command\Commands\Cache;
 
 class CLI
 {
@@ -34,8 +35,10 @@ class CLI
     protected function bootstrap()
     {
         $default_jankx_commands = array(
-            Option::class
+            Option::class,
+            Cache::class,
         );
+
         $this->command_providers = apply_filters(
             'jankx_command_providers',
             $default_jankx_commands
@@ -44,7 +47,6 @@ class CLI
 
     protected function init_commands()
     {
-        $this->register_root_command();
         foreach ($this->command_providers as $cls_command) {
             $command = new $cls_command();
             if (!is_a($command, Command::class)) {
@@ -52,30 +54,16 @@ class CLI
             }
             $this->commands[$command->get_name()] = $command;
         }
-        add_action('after_setup_theme', array($this, 'register_commands'));
-    }
-
-    public function register_root_command()
-    {
-        WP_CLI::add_command(static::COMMAND_NAMESPACE, array($this, 'print_help'));
-    }
-
-    public function print_help()
-    {
+        add_action('cli_init', array($this, 'register_commands'));
     }
 
     public function register_commands()
     {
-        foreach ($this->commands as $name => $command) {
-            // Execute register command
-            $args = $command->register_command();
-
-            if (is_callable($args)) {
-                WP_CLI::add_command(
-                    sprintf('%s %s', static::COMMAND_NAMESPACE, $name),
-                    $args
-                );
-            }
+        foreach ($this->commands as $command) {
+            WP_CLI::add_command(
+                sprintf('%s %s', static::COMMAND_NAMESPACE, $command->get_name()),
+                $command
+            );
         }
     }
 }
