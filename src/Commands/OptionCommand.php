@@ -3,7 +3,7 @@ namespace Jankx\Command\Commands;
 
 use Jankx\Command\Command;
 
-class Option extends Command
+class OptionCommand extends Command
 {
     const COMMAND_NAME = 'option';
 

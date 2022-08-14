@@ -4,8 +4,9 @@ namespace Jankx\Command;
 use WP_CLI;
 
 use Jankx\Command\Command;
-use Jankx\Command\Commands\Option;
-use Jankx\Command\Commands\Cache;
+use Jankx\Command\Commands\OptionCommand;
+use Jankx\Command\Commands\CacheCommand;
+use Jankx\Command\Commands\PublishCommand;
 
 class CLI
 {
@@ -35,8 +36,9 @@ class CLI
     protected function bootstrap()
     {
         $default_jankx_commands = array(
-            Option::class,
-            Cache::class,
+            OptionCommand::class,
+            CacheCommand::class,
+            PublishCommand::class,
         );
 
         $this->command_providers = apply_filters(
