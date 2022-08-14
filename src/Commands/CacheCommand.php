@@ -4,7 +4,7 @@ namespace Jankx\Command\Commands;
 use WP_CLI;
 use Jankx\Command\Command;
 
-class Cache extends Command
+class CacheCommand extends Command
 {
     const COMMAND_NAME = 'cache';
 
