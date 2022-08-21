@@ -13,6 +13,9 @@
   "require": {
     "jankx/helpers": "*"
   },
+  "require-dev": {
+    "wp-cli/wp-cli": "*"
+  },
   "autoload": {
     "psr-4": {
       "Jankx\\Command\\": "src/"

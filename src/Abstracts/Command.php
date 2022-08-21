@@ -1,5 +1,5 @@
 <?php
-namespace Jankx\Command;
+namespace Jankx\Command\Abstracts;
 
 abstract class Command
 {

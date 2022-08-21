@@ -3,12 +3,12 @@ namespace Jankx\Command;
 
 use WP_CLI;
 
-use Jankx\Command\Command;
+use Jankx\Command\Abstracts\Command;
 use Jankx\Command\Commands\OptionCommand;
 use Jankx\Command\Commands\CacheCommand;
 use Jankx\Command\Commands\PublishCommand;
 
-class CLI
+class CommandManager
 {
     const COMMAND_NAMESPACE = 'jankx';
 

@@ -1,8 +1,8 @@
 <?php
 namespace Jankx\Command\Commands;
 
+use Jankx\Command\Abstracts\Command;
 use WP_CLI;
-use Jankx\Command\Command;
 
 class CacheCommand extends Command
 {

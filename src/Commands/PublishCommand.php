@@ -1,7 +1,7 @@
 <?php
 namespace Jankx\Command\Commands;
 
-use Jankx\Command\Command;
+use Jankx\Command\Abstracts\Command;
 
 class PublishCommand extends Command
 {
