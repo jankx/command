@@ -11,4 +11,8 @@ class PublishCommand extends Command
     {
         return static::COMMAND_NAME;
     }
+
+    public function print_help()
+    {
+    }
 }

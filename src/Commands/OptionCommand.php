@@ -12,8 +12,7 @@ class OptionCommand extends Command
         return static::COMMAND_NAME;
     }
 
-    public function create()
+    public function print_help()
     {
-        echo 'create';
     }
 }

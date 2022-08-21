@@ -16,6 +16,9 @@ class CommandManager
 
     protected $command_providers = array();
 
+    /**
+     * @var \Jankx\Command\Abstracts\Command[]
+     */
     protected $commands = array();
 
     public static function getInstance()
@@ -55,17 +58,23 @@ class CommandManager
                 continue;
             }
             $this->commands[$command->get_name()] = $command;
+
+            do_action('jankx/command/init', $command, $command->get_name());
         }
-        add_action('cli_init', array($this, 'register_commands'));
+        // add_action('cli_init', array($this, 'register_commands'));
+    }
+
+    public function print_help()
+    {
     }
 
     public function register_commands()
     {
+        WP_CLI::add_command('jankx', [$this, 'print_help']);
+
         foreach ($this->commands as $command) {
-            WP_CLI::add_command(
-                sprintf('%s %s', static::COMMAND_NAMESPACE, $command->get_name()),
-                $command
-            );
+            WP_CLI::add_command('jankx ' . $command->get_name(), [$command, 'handle'], $command->parameters());
+            do_action('jankx/command/before_execute', $command);
         }
     }
 }

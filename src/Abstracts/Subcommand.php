@@ -1,6 +1,15 @@
 <?php
 namespace Jankx\Command\Abstracts;
 
-abstract class Subcommand extends Command
+use Jankx\Command\Interfaces\Subcommand as InterfacesSubcommand;
+
+abstract class Subcommand implements InterfacesSubcommand
 {
+    /**
+     * @return array
+     */
+    public function parameters()
+    {
+        return [];
+    }
 }

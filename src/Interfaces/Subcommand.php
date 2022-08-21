@@ -1,6 +1,6 @@
 <?php
 namespace Jankx\Command\Interfaces;
 
-interface Subcommand
+interface Subcommand extends BaseCommand
 {
 }
