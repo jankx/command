@@ -16,6 +16,8 @@ class SecureCommand extends Command
 
     protected $dirs = [];
 
+    protected $checkThemeMode;
+
     public function get_name()
     {
         return static::COMMAND_NAME;
@@ -26,10 +28,16 @@ class SecureCommand extends Command
     }
 
     protected function getFileNameExcludeWorkingDirs($phpFile) {
+        $orgFile = $phpFile;
         foreach($this->dirs as $dir) {
             $phpFile = str_replace($dir, '', $phpFile);
         }
-        return ltrim($phpFile, DIRECTORY_SEPARATOR);
+        $ret = ltrim($phpFile, DIRECTORY_SEPARATOR);
+        if (!empty($ret)) {
+            return $ret;
+        }
+
+        return $orgFile;
     }
 
 
@@ -46,7 +54,12 @@ class SecureCommand extends Command
             $paths = [$paths];
         }
 
-        $excludeDirectories = ['node_modules'];
+        $excludeDirectories = ['node_modules', 'vendor'];
+
+        if ($this->checkThemeMode) {
+            $vendorIndex = array_search('vendor', $excludeDirectories);
+            unset($excludeDirectories[$vendorIndex]);
+        }
 
         foreach ($paths as $file) {
             if (is_dir($file)) {
@@ -132,18 +145,57 @@ class SecureCommand extends Command
         WP_CLI::success(sprintf('Content of file "%s" is replaced', $this->getFileNameExcludeWorkingDirs($phpFile)));
     }
 
+    protected function resolvePath($dir) {
+        $explodeChars = ['/', '\\'];
+        $paths = [$dir];
+
+        foreach($explodeChars as $char) {
+            $tmp = [];
+            foreach($paths as $dir) {
+                $tmp = array_merge($tmp, explode($char, $dir));
+            }
+            $paths = $tmp;
+        }
+        foreach($paths as $index => $path) {
+            if ($path === '.') {
+                $paths[$index] = getcwd();
+            } elseif ($path === '..') {
+                if (isset($paths[$index - 1])) {
+                    $paths[$index - 1] = dirname($paths[$index - 1]);
+                    unset($paths[$index]);
+                    if ($paths[$index - 1] === '.') {
+                        unset($paths[$index - 1]);
+                    }
+                } else {
+                    $paths[$index] = dirname(getcwd());
+                }
+            }
+        }
+        return implode(DIRECTORY_SEPARATOR, $paths);
+    }
+
     public function handle($args, $assoc_args)
     {
+        $dirs = [];
         WP_CLI::line('Looking for PHP files to modify...');
-        $dirs = [get_template_directory()];
-        if (is_child_theme()) {
-            $dirs[] = get_stylesheet_directory();
+        $path = array_get($args, 0, false);
+        if ($path === false) {
+            $dirs = [get_template_directory()];
+            if (is_child_theme()) {
+                $dirs[] = get_stylesheet_directory();
+            }
+            $this->checkThemeMode = true;
+        } else {
+            $relovedPath = $this->resolvePath($path);
+            $dirs = [$relovedPath];
+            $this->checkThemeMode = in_array(trim($relovedPath, [get_stylesheet_directory(), get_template_directory()]));
         }
         $this->dirs = $dirs;
 
         $phpFiles = $this->lookingForPhpFiles($this->dirs);
         foreach ($phpFiles as $phpFile) {
             if (!file_exists($phpFile)) {
+                WP_CLI::warning(sprintf('Path "%s" is not exists', $this->getFileNameExcludeWorkingDirs($phpFile)));
                 continue;
             }
             $this->writeCheckLoaderIsWordPress($phpFile);
