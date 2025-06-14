@@ -8,14 +8,17 @@ if (!defined('ABSPATH')) {
 
 use Jankx\Command\Abstracts\Command;
 
-class SecureCommand extends Command {
+class SecureCommand extends Command
+{
     const COMMAND_NAME = 'secure';
 
-    public function get_name() {
+    public function get_name()
+    {
         return static::COMMAND_NAME;
     }
 
-    public function print_help() {
+    public function print_help()
+    {
     }
 
 
@@ -24,7 +27,8 @@ class SecureCommand extends Command {
      * @param string|array $file
      * @return array
      */
-    protected function lookingForPhpFiles($paths) {
+    protected function lookingForPhpFiles($paths)
+    {
         $files = [];
 
         if (is_string($paths)) {
@@ -33,7 +37,7 @@ class SecureCommand extends Command {
 
         $excludeDirectories = ['node_modules'];
 
-        foreach($paths as $file) {
+        foreach ($paths as $file) {
             if (is_dir($file)) {
                 if (in_array(basename($file), $excludeDirectories)) {
                     continue;
@@ -47,7 +51,7 @@ class SecureCommand extends Command {
                     : [ $file . DIRECTORY_SEPARATOR . 'jankx'];
                 $files = array_merge($files, $this->lookingForPhpFiles($dirs));
             } else {
-                if (pathinfo($file, PATHINFO_EXTENSION ) === 'php') {
+                if (pathinfo($file, PATHINFO_EXTENSION) === 'php') {
                     $files[] = $file;
                 }
             }
@@ -56,13 +60,15 @@ class SecureCommand extends Command {
         return $files;
     }
 
-    protected function checkFileStillNotCheckLoader($phpFile) {
+    protected function checkFileStillNotCheckLoader($phpFile)
+    {
         $file_contents = file_get_contents($phpFile);
 
         return strpos($file_contents, "defined('ABSPATH')") === false;
     }
 
-    protected function getCheckLoaderContent() {
+    protected function getCheckLoaderContent()
+    {
         ob_start();
         ?>if (!defined('ABSPATH')) {
     exit('Cheatin huh?');
@@ -70,20 +76,35 @@ class SecureCommand extends Command {
         return ob_get_clean();
     }
 
-    protected function writeCheckLoaderIsWordPress($phpFile) {
+    protected function findRelaceIndexFromExistsContent($lines): int | bool
+    {
+        foreach ($lines as $index => $line) {
+            if (strpos($line, 'namespace ') === 0) {
+                return $index + 1;
+            }
+        }
+        if (trim($lines[0]) === '<?php') {
+            return 0;
+        }
+
+        return false;
+    }
+
+    protected function writeCheckLoaderIsWordPress($phpFile)
+    {
         if (!$this->checkFileStillNotCheckLoader($phpFile)) {
             return;
         }
-        $h = fopen($phpFile, 'r');
-        $firstLine = fgets($h);
-        @fclose($h);
-
         $lines = file($phpFile);
 
-        if (trim($firstLine) === '<?php') {
+        $replaceIndex = $this->findRelaceIndexFromExistsContent($lines);
+
+        if ($replaceIndex > 0) {
+            $lines[$replaceIndex] = $this->getCheckLoaderContent() . PHP_EOL . $lines[$replaceIndex];
+        } elseif ($replaceIndex === 0) {
             $lines[0] = '<?php' . PHP_EOL . $this->getCheckLoaderContent();
         } else {
-            array_unshift($lines, '<?php ' . PHP_EOL . $this->getCheckLoaderContent() . PHP_EOL. ' ?>' . PHP_EOL);
+            array_unshift($lines, '<?php ' . PHP_EOL . $this->getCheckLoaderContent() . PHP_EOL . ' ?>' . PHP_EOL);
         }
 
         @file_put_contents($phpFile, $lines);
@@ -96,7 +117,7 @@ class SecureCommand extends Command {
             $dirs[] = get_stylesheet_directory();
         }
         $phpFiles = $this->lookingForPhpFiles($dirs);
-        foreach($phpFiles as $phpFile) {
+        foreach ($phpFiles as $phpFile) {
             if (!file_exists($phpFile)) {
                 continue;
             }
