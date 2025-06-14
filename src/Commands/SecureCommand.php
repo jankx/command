@@ -76,7 +76,14 @@ class SecureCommand extends Command
         return ob_get_clean();
     }
 
-    protected function findRelaceIndexFromExistsContent($lines): int | bool
+    /**
+     * Summary of findRelaceIndexFromExistsContent
+     *
+     * @param array $lines
+     *
+     * @return bool|float|int
+     */
+    protected function findRelaceIndexFromExistsContent($lines)
     {
         foreach ($lines as $index => $line) {
             if (strpos($line, 'namespace ') === 0) {
