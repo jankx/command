@@ -1,7 +1,7 @@
 <?php
 namespace Jankx\Command\Abstracts;
 
-use Jankx\Command\Interfaces\Command as CommandInterface;
+use Jankx\Command\Interfaces\CommandInterface;
 use Jankx\Command\Interfaces\Subcommand;
 use WP_CLI;
 
