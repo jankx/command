@@ -2,6 +2,10 @@
 
 namespace Jankx\Command\Commands;
 
+if (!defined('ABSPATH')) {
+    exit('Cheatin huh?');
+}
+
 use Jankx\Command\Abstracts\Command;
 
 class PublishCommand extends Command

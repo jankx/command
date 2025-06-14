@@ -2,6 +2,8 @@
 
 namespace Jankx\Command\Commands;
 
+use WP_CLI;
+
 if (!defined('ABSPATH')) {
     exit('Cheatin huh?');
 }
@@ -12,6 +14,8 @@ class SecureCommand extends Command
 {
     const COMMAND_NAME = 'secure';
 
+    protected $dirs = [];
+
     public function get_name()
     {
         return static::COMMAND_NAME;
@@ -19,6 +23,13 @@ class SecureCommand extends Command
 
     public function print_help()
     {
+    }
+
+    protected function getFileNameExcludeWorkingDirs($phpFile) {
+        foreach($this->dirs as $dir) {
+            $phpFile = str_replace($dir, '', $phpFile);
+        }
+        return ltrim($phpFile, DIRECTORY_SEPARATOR);
     }
 
 
@@ -99,7 +110,9 @@ class SecureCommand extends Command
 
     protected function writeCheckLoaderIsWordPress($phpFile)
     {
+        WP_CLI::line(sprintf('Checking content of file "%s"', $this->getFileNameExcludeWorkingDirs($phpFile)));
         if (!$this->checkFileStillNotCheckLoader($phpFile)) {
+            WP_CLI::success(sprintf('File "%s" is OK', $this->getFileNameExcludeWorkingDirs($phpFile)));
             return;
         }
         $lines = file($phpFile);
@@ -114,16 +127,21 @@ class SecureCommand extends Command
             array_unshift($lines, '<?php ' . PHP_EOL . $this->getCheckLoaderContent() . PHP_EOL . ' ?>' . PHP_EOL);
         }
 
+        WP_CLI::line(sprintf('Replace content of file "%s" at index [%s]', $this->getFileNameExcludeWorkingDirs($phpFile), $replaceIndex > 0 ? $replaceIndex . ': after namespace' : '0: at file header'));
         @file_put_contents($phpFile, $lines);
+        WP_CLI::success(sprintf('Content of file "%s" is replaced', $this->getFileNameExcludeWorkingDirs($phpFile)));
     }
 
     public function handle($args, $assoc_args)
     {
+        WP_CLI::line('Looking for PHP files to modify...');
         $dirs = [get_template_directory()];
         if (is_child_theme()) {
             $dirs[] = get_stylesheet_directory();
         }
-        $phpFiles = $this->lookingForPhpFiles($dirs);
+        $this->dirs = $dirs;
+
+        $phpFiles = $this->lookingForPhpFiles($this->dirs);
         foreach ($phpFiles as $phpFile) {
             if (!file_exists($phpFile)) {
                 continue;

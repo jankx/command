@@ -2,6 +2,10 @@
 
 namespace Jankx\Command\Abstracts;
 
+if (!defined('ABSPATH')) {
+    exit('Cheatin huh?');
+}
+
 use Jankx\Command\Interfaces\CommandInterface;
 use Jankx\Command\Interfaces\Subcommand;
 use WP_CLI;

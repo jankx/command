@@ -2,6 +2,10 @@
 
 namespace Jankx\Command\Interfaces;
 
+if (!defined('ABSPATH')) {
+    exit('Cheatin huh?');
+}
+
 interface CommandInterface extends BaseCommand
 {
     public function addSubCommand(Subcommand $command);

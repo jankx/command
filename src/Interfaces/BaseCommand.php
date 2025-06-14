@@ -2,6 +2,10 @@
 
 namespace Jankx\Command\Interfaces;
 
+if (!defined('ABSPATH')) {
+    exit('Cheatin huh?');
+}
+
 interface BaseCommand
 {
     public function handle($args, $assoc_args);

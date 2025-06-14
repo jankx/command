@@ -2,6 +2,10 @@
 
 namespace Jankx\Command\Commands\Cache;
 
+if (!defined('ABSPATH')) {
+    exit('Cheatin huh?');
+}
+
 use Jankx\Command\Abstracts\Subcommand;
 use WP_CLI;
 

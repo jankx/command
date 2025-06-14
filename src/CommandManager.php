@@ -2,6 +2,10 @@
 
 namespace Jankx\Command;
 
+if (!defined('ABSPATH')) {
+    exit('Cheatin huh?');
+}
+
 use Jankx\Command\Interfaces\CommandInterface;
 use WP_CLI;
 use Jankx\Command\Commands\OptionCommand;

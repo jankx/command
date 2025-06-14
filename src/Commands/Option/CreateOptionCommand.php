@@ -2,6 +2,10 @@
 
 namespace Jankx\Command\Commands\Option;
 
+if (!defined('ABSPATH')) {
+    exit('Cheatin huh?');
+}
+
 use Jankx\Command\Abstracts\Subcommand;
 
 class CreateOptionCommand extends Subcommand
