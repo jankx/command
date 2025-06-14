@@ -1,9 +1,9 @@
 <?php
+
 namespace Jankx\Command;
 
 use Jankx\Command\Interfaces\CommandInterface;
 use WP_CLI;
-
 use Jankx\Command\Commands\OptionCommand;
 use Jankx\Command\Commands\CacheCommand;
 use Jankx\Command\Commands\PublishCommand;

@@ -1,4 +1,5 @@
 <?php
+
 namespace Jankx\Command\Commands\Cache;
 
 use Jankx\Command\Abstracts\Subcommand;

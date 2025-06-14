@@ -1,4 +1,5 @@
 <?php
+
 namespace Jankx\Command\Commands\Option;
 
 use Jankx\Command\Abstracts\Subcommand;

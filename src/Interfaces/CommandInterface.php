@@ -1,4 +1,5 @@
 <?php
+
 interface CommandInterface extends BaseCommand
 {
     public function addSubCommand(Subcommand $command);

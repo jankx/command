@@ -1,4 +1,5 @@
 <?php
+
 namespace Jankx\Command\Interfaces;
 
 interface BaseCommand

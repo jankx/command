@@ -1,4 +1,5 @@
 <?php
+
 namespace Jankx\Command\Commands;
 
 use Jankx\Command\Abstracts\Command;
