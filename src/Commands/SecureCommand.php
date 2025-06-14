@@ -2,13 +2,16 @@
 
 namespace Jankx\Command\Commands;
 
-use WP_CLI;
+if (!class_exists('WP_CLI')) {
+    return;
+}
 
 if (!defined('ABSPATH')) {
     exit('Cheating huh?');
 }
 
 use Jankx\Command\Abstracts\Command;
+use WP_CLI;
 
 class SecureCommand extends Command
 {
@@ -23,8 +26,38 @@ class SecureCommand extends Command
         return static::COMMAND_NAME;
     }
 
+    public function parameters() {
+        return array(
+            'shortdesc' => 'Check and add security code to PHP files',
+            'synopsis' => array(
+                array(
+                    'type'        => 'positional',
+                    'name'        => 'path',
+                    'optional'    => true,
+                    'description' => 'Path to the directory to check. If not specified, the current theme will be checked by default.',
+                ),
+            ),
+            'when' => 'after_wp_load',
+        );
+    }
+
     public function print_help()
     {
+        WP_CLI::line('This command helps check and add security code to PHP files.');
+        WP_CLI::line('');
+        WP_CLI::line('Usage:');
+        WP_CLI::line('  wp jankx secure [<path>]');
+        WP_CLI::line('');
+        WP_CLI::line('Parameters:');
+        WP_CLI::line('  <path>    Path to the directory to check. If not specified, the current theme will be checked by default.');
+        WP_CLI::line('');
+        WP_CLI::line('Description:');
+        WP_CLI::line('  This command will scan all PHP files in the specified directory and add ABSPATH check code');
+        WP_CLI::line('  to ensure files can only be accessed through WordPress.');
+        WP_CLI::line('');
+        WP_CLI::line('Examples:');
+        WP_CLI::line('  wp jankx secure                    # Check current theme');
+        WP_CLI::line('  wp jankx secure /path/to/dir      # Check specific directory');
     }
 
     protected function getFileNameExcludeWorkingDirs($phpFile) {
@@ -140,9 +173,9 @@ class SecureCommand extends Command
             array_unshift($lines, '<?php ' . PHP_EOL . $this->getCheckLoaderContent() . PHP_EOL . ' ?>' . PHP_EOL);
         }
 
-        WP_CLI::line(sprintf('Replace content of file "%s" at index [%s]', $this->getFileNameExcludeWorkingDirs($phpFile), $replaceIndex > 0 ? $replaceIndex . ': after namespace' : '0: at file header'));
+        WP_CLI::line(sprintf('Replacing content of file "%s" at index [%s]', $this->getFileNameExcludeWorkingDirs($phpFile), $replaceIndex > 0 ? $replaceIndex . ': after namespace' : '0: at file header'));
         @file_put_contents($phpFile, $lines);
-        WP_CLI::success(sprintf('Content of file "%s" is replaced', $this->getFileNameExcludeWorkingDirs($phpFile)));
+        WP_CLI::success(sprintf('Content of file "%s" has been replaced', $this->getFileNameExcludeWorkingDirs($phpFile)));
     }
 
     protected function resolvePath($dir) {
@@ -188,14 +221,15 @@ class SecureCommand extends Command
         } else {
             $relovedPath = $this->resolvePath($path);
             $dirs = [$relovedPath];
-            $this->checkThemeMode = in_array(trim($relovedPath, [get_stylesheet_directory(), get_template_directory()]));
+            $this->checkThemeMode = in_array(trim($relovedPath) , [get_stylesheet_directory(), get_template_directory()]);
         }
+
         $this->dirs = $dirs;
 
         $phpFiles = $this->lookingForPhpFiles($this->dirs);
         foreach ($phpFiles as $phpFile) {
             if (!file_exists($phpFile)) {
-                WP_CLI::warning(sprintf('Path "%s" is not exists', $this->getFileNameExcludeWorkingDirs($phpFile)));
+                WP_CLI::warning(sprintf('Path "%s" does not exist', $this->getFileNameExcludeWorkingDirs($phpFile)));
                 continue;
             }
             $this->writeCheckLoaderIsWordPress($phpFile);
