@@ -107,9 +107,9 @@ class SecureCommand extends Command
         $replaceIndex = $this->findRelaceIndexFromExistsContent($lines);
 
         if ($replaceIndex > 0) {
-            $lines[$replaceIndex] = $this->getCheckLoaderContent() . PHP_EOL . $lines[$replaceIndex];
+            $lines[$replaceIndex] = PHP_EOL . $this->getCheckLoaderContent() . PHP_EOL . $lines[$replaceIndex];
         } elseif ($replaceIndex === 0) {
-            $lines[0] = '<?php' . PHP_EOL . $this->getCheckLoaderContent();
+            $lines[0] = '<?php' . PHP_EOL . $this->getCheckLoaderContent() . PHP_EOL;
         } else {
             array_unshift($lines, '<?php ' . PHP_EOL . $this->getCheckLoaderContent() . PHP_EOL . ' ?>' . PHP_EOL);
         }
