@@ -3,7 +3,7 @@
 namespace Jankx\Command;
 
 if (!defined('ABSPATH')) {
-    exit('Cheatin huh?');
+    exit('Cheating huh?');
 }
 
 use Jankx\Command\Interfaces\CommandInterface;

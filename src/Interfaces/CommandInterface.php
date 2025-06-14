@@ -3,7 +3,7 @@
 namespace Jankx\Command\Interfaces;
 
 if (!defined('ABSPATH')) {
-    exit('Cheatin huh?');
+    exit('Cheating huh?');
 }
 
 interface CommandInterface extends BaseCommand

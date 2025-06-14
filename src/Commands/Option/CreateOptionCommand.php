@@ -3,7 +3,7 @@
 namespace Jankx\Command\Commands\Option;
 
 if (!defined('ABSPATH')) {
-    exit('Cheatin huh?');
+    exit('Cheating huh?');
 }
 
 use Jankx\Command\Abstracts\Subcommand;

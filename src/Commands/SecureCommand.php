@@ -5,7 +5,7 @@ namespace Jankx\Command\Commands;
 use WP_CLI;
 
 if (!defined('ABSPATH')) {
-    exit('Cheatin huh?');
+    exit('Cheating huh?');
 }
 
 use Jankx\Command\Abstracts\Command;
@@ -95,7 +95,7 @@ class SecureCommand extends Command
     {
         ob_start();
         ?>if (!defined('ABSPATH')) {
-    exit('Cheatin huh?');
+    exit('Cheating huh?');
 }<?php
         return ob_get_clean();
     }
